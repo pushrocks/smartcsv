@@ -1,6 +1,6 @@
 {
   "name": "@pushrocks/smartcsv",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "handle csv data",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
