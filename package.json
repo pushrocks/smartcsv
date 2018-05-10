@@ -1,0 +1,20 @@
+{
+  "name": "@pushrocks/smartcsv",
+  "version": "1.0.1",
+  "description": "handle csv data",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "author": "Lossless GmbH",
+  "license": "MIT",
+  "scripts": {
+    "test": "(ts-node -O '{\"lib\": [ \"es2015\" ]}' test/test.ts)",
+    "format": "(gitzone format)"
+  },
+  "devDependencies": {
+    "smartfile": "^4.2.28",
+    "tapbundle": "^2.0.0"
+  },
+  "dependencies": {
+    "smartq": "^1.1.8"
+  }
+}
