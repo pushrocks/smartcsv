@@ -1,6 +1,16 @@
+export interface ICsvConstructorOptions {
+    headers: boolean;
+}
 export declare class Csv {
-    static createCsvFromString(csvStringArg: string): Promise<Csv>;
+    static createCsvFromString(csvStringArg: string, options: ICsvConstructorOptions): Promise<Csv>;
     csvString: string;
-    getHeaders(): void;
-    exportAsJson(): void;
+    headers: string[];
+    keyFrame: string;
+    options: ICsvConstructorOptions;
+    determineKeyframe(): void;
+    serializeCsvString(): any[];
+    getRows(): string[];
+    getHeaders(): string[];
+    createDataObject(dataArray: string[]): any;
+    exportAsObject(): Promise<any>;
 }

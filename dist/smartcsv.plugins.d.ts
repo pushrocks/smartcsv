@@ -1,2 +1,2 @@
-import * as csv from 'csv';
-export { csv };
+import * as smartq from 'smartq';
+export { smartq };

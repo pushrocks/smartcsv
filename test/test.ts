@@ -8,12 +8,12 @@ import * as smartfile from 'smartfile';
 let fileString: string;
 let testCsv: smartcsv.Csv;
 
-tap.test('should read a file',  async (tools) => {
+tap.test('should read a file', async tools => {
   fileString = smartfile.fs.toStringSync('./test/sample.csv');
 });
 
 tap.test('should create a valid csv', async () => {
-  testCsv = await smartcsv.Csv.createCsvFromString(fileString, {headers: true});
+  testCsv = await smartcsv.Csv.createCsvFromString(fileString, { headers: true });
   const result = await testCsv.exportAsObject();
   console.log(result);
 });

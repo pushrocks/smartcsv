@@ -12,6 +12,9 @@ stages:
 - release
 - metadata
 
+# ====================
+# security stage
+# ====================
 mirror:
   stage: security
   script:
@@ -30,6 +33,9 @@ snyk:
   - docker
   - notpriv
 
+# ====================
+# test stage
+# ====================
 testLEGACY:
   stage: test
   script:
@@ -68,7 +74,6 @@ release:
   stage: release
   script:
   - npmci node install stable
-  - npmci npm prepare
   - npmci npm publish
   only:
   - tags

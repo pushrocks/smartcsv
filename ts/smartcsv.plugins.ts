@@ -1,5 +1,3 @@
 import * as smartq from 'smartq';
 
-export {
-  smartq
-};
+export { smartq };
