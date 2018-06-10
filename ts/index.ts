@@ -54,8 +54,12 @@ export class Csv {
     return resultArray;
   }
 
-  public getRows() {
-    return this.csvString.split('\n');
+  public getRows(): string[] {
+    const rowsArray = this.csvString.split('\n');
+    if (rowsArray[rowsArray.length - 1] === '') {
+      rowsArray.pop();
+    }
+    return rowsArray;
   }
 
   public getHeaders() {
