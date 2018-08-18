@@ -1,3 +1,3 @@
-import * as smartq from 'smartq';
+import * as smartq from '@pushrocks/smartpromise';
 
 export { smartq };

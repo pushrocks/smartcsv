@@ -1,9 +1,9 @@
 // tslint:disable-next-line:no-implicit-dependencies
-import { expect, tap } from 'tapbundle';
+import { expect, tap } from '@pushrocks/tapbundle';
 import * as smartcsv from '../ts/index';
 
 // tslint:disable-next-line:no-implicit-dependencies
-import * as smartfile from 'smartfile';
+import * as smartfile from '@pushrocks/smartfile';
 
 let fileString: string;
 let testCsv: smartcsv.Csv;
