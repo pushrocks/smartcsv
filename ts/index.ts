@@ -7,11 +7,9 @@ export interface ICsvConstructorOptions {
 export class Csv {
   public static async createCsvFromString(
     csvStringArg: string,
-    options: ICsvConstructorOptions
+    optionsArg: ICsvConstructorOptions
   ): Promise<Csv> {
-    const csvInstance = new Csv();
-    csvInstance.csvString = csvStringArg;
-    csvInstance.determineKeyframe();
+    const csvInstance = new Csv(csvStringArg, optionsArg);
     return csvInstance;
   }
   public csvString: string;
@@ -22,6 +20,15 @@ export class Csv {
     headers: true
   };
 
+  constructor(csvStringArg: string, optionsArg: ICsvConstructorOptions) {
+    this.csvString = csvStringArg;
+    this.options = optionsArg;
+    this.determineKeyframe();
+  }
+
+  /**
+   * determines the keyframe of the csv string
+   */
   public determineKeyframe() {
     let commaLength = 0;
     let semicolonLength = 0;
@@ -41,6 +48,9 @@ export class Csv {
     }
   }
 
+  /**
+   * serializes the csv string
+   */
   public serializeCsvString() {
     const rowArray = this.getRows();
     const resultArray = [];
