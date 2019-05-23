@@ -18,4 +18,12 @@ tap.test('should create a valid csv', async () => {
   console.log(result);
 });
 
+tap.test('should create a valid csv string', async () => {
+  const createdCsvString = await smartcsv.Csv.createCsvStringFromArray([
+    { wow: 'hi', wow2: 'there' },
+    { wow: 'really', wow3: 'yes' }
+  ]);
+  console.log(createdCsvString);
+});
+
 tap.start();

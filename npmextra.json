@@ -2,5 +2,15 @@
   "npmci": {
     "npmGlobalTools": [],
     "npmAccessLevel": "public"
+  },
+  "gitzone": {
+    "module": {
+      "githost": "gitlab.com",
+      "gitscope": "pushrocks",
+      "gitrepo": "smartcsv",
+      "shortDescription": "handle csv data | gitzone standard compliant",
+      "npmPackagename": "@pushrocks/smartcsv",
+      "license": "MIT"
+    }
   }
 }

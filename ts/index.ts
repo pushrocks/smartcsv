@@ -5,6 +5,13 @@ export interface ICsvConstructorOptions {
 }
 
 export class Csv {
+  // STATIC
+
+  /**
+   * creates a Csv Object from string
+   * @param csvStringArg
+   * @param optionsArg
+   */
   public static async createCsvFromString(
     csvStringArg: string,
     optionsArg: ICsvConstructorOptions
@@ -12,6 +19,35 @@ export class Csv {
     const csvInstance = new Csv(csvStringArg, optionsArg);
     return csvInstance;
   }
+
+  public static async createCsvStringFromArray(arrayArg: any[]): Promise<string> {
+    const foundKeys: string[] = [];
+
+    // lets deal with the keys
+    for (const objectArg of arrayArg) {
+      for (const key of Object.keys(objectArg)) {
+        foundKeys.includes(key) ? null : foundKeys.push(key);
+      }
+    }
+
+    // lets deal with the data
+    const dataRows: string[] = [];
+    for (const objectArg of arrayArg) {
+      const dataRowArray: string[] = [];
+      for (const key of foundKeys) {
+        dataRowArray.push(objectArg[key]);
+      }
+      dataRows.push(dataRowArray.join(','));
+    }
+
+    // lets put togehter the csv string and return it
+    const headerString = foundKeys.join(',');
+    const dataString = dataRows.join('\n');
+    const csvString = `${headerString}\n${dataString}\n`;
+    return csvString;
+  }
+
+  // INSTANCE
   public csvString: string;
   public headers: string[];
   public keyFrame: string = null;
