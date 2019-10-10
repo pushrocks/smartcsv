@@ -1,3 +1,4 @@
-import * as smartq from '@pushrocks/smartpromise';
+import * as smartpromise from '@pushrocks/smartpromise';
+import * as smartstring from '@pushrocks/smartstring';
 
-export { smartq };
+export { smartpromise, smartstring };

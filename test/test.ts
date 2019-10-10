@@ -13,7 +13,7 @@ tap.test('should read a file', async tools => {
 });
 
 tap.test('should create a valid csv', async () => {
-  testCsv = await smartcsv.Csv.createCsvFromString(fileString, { headers: true });
+  testCsv = await smartcsv.Csv.createCsvFromString(fileString, { headers: true, unquote: true });
   const result = await testCsv.exportAsObject();
   console.log(result);
 });

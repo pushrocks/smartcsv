@@ -2,6 +2,7 @@ import * as plugins from './smartcsv.plugins';
 
 export interface ICsvConstructorOptions {
   headers: boolean;
+  unquote: boolean;
 }
 
 export class Csv {
@@ -17,6 +18,7 @@ export class Csv {
     optionsArg: ICsvConstructorOptions
   ): Promise<Csv> {
     const csvInstance = new Csv(csvStringArg, optionsArg);
+    await csvInstance.exportAsObject();
     return csvInstance;
   }
 
@@ -51,21 +53,38 @@ export class Csv {
   public csvString: string;
   public headers: string[];
   public keyFrame: string = null;
+  public data: any[];
 
   public options: ICsvConstructorOptions = {
-    headers: true
+    headers: true,
+    unquote: true
   };
 
   constructor(csvStringArg: string, optionsArg: ICsvConstructorOptions) {
-    this.csvString = csvStringArg;
-    this.options = optionsArg;
+    this.options = {
+      ...this.options,
+      ...optionsArg
+    };
+
+    let csvStringToParse = csvStringArg;
+    if (this.options.unquote) {
+      csvStringToParse = csvStringToParse.replace(
+        /"(.*?)"/gi,
+        (match, p1, offset, originalString) => {
+          return plugins.smartstring.base64.encode(match);
+        }
+      );
+    }
+
+    this.csvString = csvStringToParse;
+
     this.determineKeyframe();
   }
 
   /**
    * determines the keyframe of the csv string
    */
-  public determineKeyframe() {
+  private determineKeyframe() {
     let commaLength = 0;
     let semicolonLength = 0;
     const commaRegexResult = this.csvString.match(/,/g);
@@ -87,7 +106,7 @@ export class Csv {
   /**
    * serializes the csv string
    */
-  public serializeCsvString() {
+  private serializeCsvString() {
     const rowArray = this.getRows();
     const resultArray = [];
     if (this.options.headers) {
@@ -100,7 +119,10 @@ export class Csv {
     return resultArray;
   }
 
-  public getRows(): string[] {
+  /**
+   * gets the rows of the csv
+   */
+  private getRows(): string[] {
     const rowsArray = this.csvString.split('\n');
     if (rowsArray[rowsArray.length - 1] === '') {
       rowsArray.pop();
@@ -108,20 +130,35 @@ export class Csv {
     return rowsArray;
   }
 
-  public getHeaders() {
+  private getHeaders() {
     const rowArray = this.getRows();
     if (this.options.headers) {
       let headerRow = rowArray[0];
       this.headers = headerRow.split(this.keyFrame);
+      if (this.options.unquote) {
+        const unquotedHeaders: string[] = [];
+        for (const header of this.headers) {
+          if (plugins.smartstring.type.isBase64(header)) {
+            unquotedHeaders.push(plugins.smartstring.base64.decode(header).replace(/['"]+/g, ''));
+          } else {
+            unquotedHeaders.push(header);
+          }
+        }
+        this.headers = unquotedHeaders;
+      }
     }
     return this.headers;
   }
 
-  public createDataObject(dataArray: string[]) {
+  private createDataObject(dataArray: string[]) {
     const neededIterations = dataArray.length;
     let resultJson: any = {};
     for (let i = 0; i < neededIterations; i++) {
-      resultJson[this.headers[i]] = dataArray[i];
+      let value = dataArray[i];
+      if (this.options.unquote && plugins.smartstring.type.isBase64(value)) {
+        value = plugins.smartstring.base64.decode(value).replace(/['"]+/g, '').replace(/['"]+/g, '');
+      }
+      resultJson[this.headers[i]] = value;
     }
     return resultJson;
   }
@@ -132,6 +169,7 @@ export class Csv {
     for (const dataArray of serializedData) {
       dataObjects.push(this.createDataObject(dataArray));
     }
+    this.data = dataObjects;
     return dataObjects;
   }
 }
