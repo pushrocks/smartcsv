@@ -2,7 +2,7 @@ import * as plugins from './smartcsv.plugins';
 
 export interface ICsvConstructorOptions {
   headers: boolean;
-  unquote: boolean;
+  unquote?: boolean;
 }
 
 export class Csv {
