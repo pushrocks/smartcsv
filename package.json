@@ -1,6 +1,6 @@
 {
   "name": "@pushrocks/smartcsv",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "private": false,
   "description": "handle csv data | gitzone standard compliant",
   "main": "dist/index.js",
