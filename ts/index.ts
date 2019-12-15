@@ -55,6 +55,8 @@ export class Csv {
   public keyFrame: string = null;
   public data: any[];
 
+  private base64RecognitionPrefix = '####12345####';
+
   public options: ICsvConstructorOptions = {
     headers: true,
     unquote: true
@@ -71,7 +73,7 @@ export class Csv {
       csvStringToParse = csvStringToParse.replace(
         /"(.*?)"/gi,
         (match, p1, offset, originalString) => {
-          return plugins.smartstring.base64.encode(match);
+          return this.base64RecognitionPrefix + plugins.smartstring.base64.encode(match);
         }
       );
     }
@@ -137,8 +139,9 @@ export class Csv {
       this.headers = headerRow.split(this.keyFrame);
       if (this.options.unquote) {
         const unquotedHeaders: string[] = [];
-        for (const header of this.headers) {
-          if (plugins.smartstring.type.isBase64(header)) {
+        for (let header of this.headers) {
+          if (header.startsWith(this.base64RecognitionPrefix)) {
+            header = header.replace(this.base64RecognitionPrefix, '');
             unquotedHeaders.push(plugins.smartstring.base64.decode(header).replace(/['"]+/g, ''));
           } else {
             unquotedHeaders.push(header);
@@ -155,8 +158,12 @@ export class Csv {
     let resultJson: any = {};
     for (let i = 0; i < neededIterations; i++) {
       let value = dataArray[i];
-      if (this.options.unquote && plugins.smartstring.type.isBase64(value)) {
-        value = plugins.smartstring.base64.decode(value).replace(/['"]+/g, '').replace(/['"]+/g, '');
+      if (this.options.unquote && value.startsWith(this.base64RecognitionPrefix)) {
+        value = value.replace(this.base64RecognitionPrefix, '');
+        value = plugins.smartstring.base64
+          .decode(value)
+          .replace(/['"]+/g, '')
+          .replace(/['"]+/g, '');
       }
       resultJson[this.headers[i]] = value;
     }
